@@ -1,4 +1,4 @@
-<div align="center">
+<!-- <div align="center">
   <img src="./public/assets/DevSecOps.png" alt="Logo" width="100%" height="100%">
 
   <br>
@@ -20,7 +20,7 @@
 
 ## Susbcribe:
 [https://www.youtube.com/@cloudchamp?
-](https://www.youtube.com/@cloudchamp?sub_confirmation=1)
+](https://www.youtube.com/@cloudchamp?sub_confirmation=1) -->
 
 # Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
 
