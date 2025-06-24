@@ -1,0 +1,26 @@
+# Use official OpenJDK 17 image with Debian
+FROM openjdk:17-jdk-slim
+
+# Install Node.js 18 (LTS) - Node.js 16 is now deprecated
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    # Install specific npm version compatible with Node.js 18
+    npm install -g npm@9 && \
+    # Install SonarScanner
+    npm install -g sonarqube-scanner
+
+# Create and set working directory
+WORKDIR /app
+
+# Set environment variables
+ENV JAVA_HOME=/usr/local/openjdk-17
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Verify installations
+RUN java -version && \
+    node --version && \
+    npm --version && \
+    sonar-scanner --version
+    
