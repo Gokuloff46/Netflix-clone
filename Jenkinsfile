@@ -26,8 +26,8 @@ pipeline {
               -Dsonar.projectName=Netflix \
               -Dsonar.projectVersion=1.0 \
               -Dsonar.sources=. \
-              -Dsonar.host.url=http://3.110.221.90:9000 \
-              -Dsonar.login=sqp_519ec7c4c2bf3ab0d4ad8266e2dddd0085268579'''
+              -Dsonar.host.url=http://15.206.212.228:9000 \
+              -Dsonar.login=sqp_006296864c5b18e6022d92d18584579224a7690d'''
         }
     }
 }
@@ -83,4 +83,5 @@ pipeline {
     
 }
 }
+
 
