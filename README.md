@@ -905,5 +905,5 @@ Now, log into ArgoCD using the below command:
 **Phase 7: Cleanup**
 
 1. **Cleanup AWS EC2 Instances:**
-    - Terminate AWS EC2 instances that are no longer needed.ll
+    - Terminate AWS EC2 instances that are no longer needed.
     
