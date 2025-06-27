@@ -58,7 +58,7 @@
     
     ```bash
     docker build -t netflix .
-    docker run -d --name netflix -p 8081:80 netflix:latest
+    docker run -d --name netflix -p 82:80 netflix:latest
     
     #to delete
     docker stop <containerid>
@@ -204,7 +204,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'main', url: 'https://github.com/Gokuloff46/Netflix-clone.git'
             }
         }
         stage("Sonarqube Analysis") {
@@ -277,46 +277,53 @@ Now, you have installed the Dependency-Check plugin, configured the tool, and ad
 
 ```groovy
 
-pipeline{
+pipeline {
     agent any
-    tools{
+    tools {
         jdk 'jdk17'
         nodejs 'node16'
     }
     environment {
-        SCANNER_HOME=tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner'
     }
     stages {
-        stage('clean workspace'){
-            steps{
+        stage('clean workspace') {
+            steps {
                 cleanWs()
             }
         }
-        stage('Checkout from Git'){
-            steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Gokuloff46/Netflix-clone.git'
             }
         }
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
-                }
-            }
+       stage("Sonarqube Analysis") {
+            steps {
+        withSonarQubeEnv('sonar-server') {
+            sh '''${SCANNER_HOME}/bin/sonar-scanner \
+              -Dsonar.projectKey=Netflix \
+              -Dsonar.projectName=Netflix \
+              -Dsonar.projectVersion=1.0 \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=http://3.110.115.237:9000/ \
+              -Dsonar.login=sqp_45b9dae37f2a433f4b6d44c0db7f5bf99aeb8d3d'''
         }
-        stage("quality gate"){
-           steps {
+    }
+}
+        stage("quality gate") {
+            steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
-            } 
+            }
         }
         stage('Install Dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
+  steps {
+    sh 'npm cache clean --force' 
+    sh 'npm install'
+  }
+}
+
         stage('OWASP FS SCAN') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
@@ -328,30 +335,49 @@ pipeline{
                 sh "trivy fs . > trivyfs.txt"
             }
         }
-        stage("Docker Build & Push"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
+        stage("Docker Build & Push") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker build --build-arg TMDB_V3_API_KEY=4da015bba809123ef4a72acc034c5bed -t netflix ."
+                        sh "docker tag netflix gokulfgi/netflix:latest "
+                        sh "docker push gokulfgi/netflix:latest "
                     }
                 }
             }
         }
-        stage("TRIVY"){
-            steps{
-                sh "trivy image nasi101/netflix:latest > trivyimage.txt" 
+        stage("TRIVY") {
+            steps {
+                sh "trivy image gokulfgi/netflix:latest > trivyimage.txt"
             }
         }
-        stage('Deploy to container'){
-            steps{
-                sh 'docker run -d --name netflix -p 8081:80 nasi101/netflix:latest'
+        stage('Deploy to container') {
+            steps {
+                sh 'docker run -d \
+                    --restart unless-stopped \
+                    -p 82:80 \
+                     gokulfgi/netflix:latest'
             }
         }
+        // --- Mail Notification Stage ---
+        stage('Send Email Notification') {
+            steps {
+                mail to: 'gkdemo46@gmail.com',
+                     subject: "Jenkins Build: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "Build finished with status: ${currentBuild.currentResult}"
+            }
+        }
+        // --- Kubernetes Deployment Stage ---
+        // stage('Kubernetes Deploy') {
+        //     steps {
+        //         withKubeConfig([credentialsId: 'kubeconfig-cred']) {
+        //             sh 'kubectl apply -f k8s/deployment.yaml'
+        //             sh 'kubectl apply -f k8s/node-service.yaml'
+        //         }
+        //     }
+        // }
     }
 }
-
 
 If you get docker login failed errorr
 
@@ -532,14 +558,22 @@ sudo systemctl restart jenkins
      scrape_interval: 15s
 
    scrape_configs:
-     - job_name: 'node_exporter'
-       static_configs:
-         - targets: ['localhost:9100']
 
-     - job_name: 'jenkins'
-       metrics_path: '/prometheus'
-       static_configs:
-         - targets: ['<your-jenkins-ip>:<your-jenkins-port>']
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['<your-server-ip>:9100']
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus'
+    static_configs:
+      - targets: ['<your-server-ip>:8080']
+  - job_name: 'k8s'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['<your-server-ip>:9100']
+
    ```
 
    Make sure to replace `<your-jenkins-ip>` and `<your-jenkins-port>` with the appropriate values for your Jenkins setup.
@@ -682,11 +716,76 @@ That's it! You've successfully installed and set up Grafana to work with Prometh
 1. **Implement Notification Services:**
     - Set up email notifications in Jenkins or other notification mechanisms.
 
-# Phase 6: Kubernetes
+**Phase 6: install Amazon EKS:**
+To install Amazon EKS (Elastic Kubernetes Service) tooling in WSL (Windows Subsystem for Linux), you’ll mainly need to set up AWS CLI, kubectl, and eksctl. Here’s a step-by-step guide tailored for your environment:
+✅ Prerequisites
+•	WSL2 installed and running (Ubuntu is recommended)
+•	AWS account with appropriate IAM permissions
+•	Docker Desktop with WSL integration (optional but useful for local testing)
+________________________________________
+## 🔧 Step 1: Install AWS CLI (Enter it in your Terminal cli)
+```
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+```
+________________________________________
+## ✅ Use -L to follow redirects
+Try this instead:
+```
+curl -Ls https://dl.k8s.io/release/stable.txt
+```
+The -L flag tells curl to follow the redirect, and -s keeps it quiet except for the output.
+If that works, you should see something like:
+```
+v1.30.1
+```
+Then you can proceed with:
+```
+KUBECTL_VERSION=$(curl -Ls https://dl.k8s.io/release/stable.txt)
+curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+```
+Let me know what output you get from the first command—if it still misbehaves, we’ll try a different mirror or fetch it manually.
+________________________________________
+## 🔧 Step 3: Install eksctl
+```
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+```
+________________________________________
+## 🔧 Step 4: Configure AWS CLI
+aws configure
+Enter your AWS Access Key, Secret Key, region (e.g., ap-south-1), and output format (json is fine).
+________________________________________
+ ## 🚀 Step 5: Create Kubernetes Cluster with Nodegroups
 
-## Create Kubernetes Cluster with Nodegroups
+ In this phase, you'll set up a Kubernetes cluster with node groups. This will provide a scalable environment to deploy and manage your applications.
 
-In this phase, you'll set up a Kubernetes cluster with node groups. This will provide a scalable environment to deploy and manage your applications.
+```
+eksctl create cluster --name demo-cluster --region ap-south-1 --nodes 2
+
+or
+
+eksctl create cluster \
+  --name netflix-clone \
+  --region ap-south-1 \
+  --version 1.32 \
+  --nodegroup-name cluset1 \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 2 \
+  --nodes-max 2 \
+  --managed
+
+```
+This will spin up a basic EKS cluster. You can tweak the config or use a YAML file for more control.
+
+
 
 ## Monitor Kubernetes with Prometheus
 
@@ -750,7 +849,7 @@ To deploy an application with ArgoCD, you can follow these steps, which I'll out
    - `syncPolicy`: Configure the sync policy, including automatic syncing, pruning, and self-healing.
 
 4. **Access your Application**
-   - To Access the app make sure port 30007 is open in your security group and then open a new tab paste your NodeIP:30007, your app should be running.
+   - To Access the app make sure port 82 is open in your security group and then open a new tab paste your NodeIP:82, your app should be running.
 
 **Phase 7: Cleanup**
 
