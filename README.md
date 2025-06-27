@@ -833,7 +833,58 @@ To deploy an application with ArgoCD, you can follow these steps, which I'll out
 
 ### Deploy Application with ArgoCD
 
-1. **Install ArgoCD:**
+1. **Install ArgoCD on the EKS cluster and configure sync with the GitHub manifest repository.**
+
+## Step 1: Log in to CloudShell or your terminal window
+
+Open your AWS console and look for the CloudShell icon at the top right bar next to the notification bell icon, as shown below:
+
+## Step 2: Create kubeconfig
+Create or update kubeconfig using the below command:
+```
+aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+```
+
+## Step 3: Install ArgoCD
+```
+curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+chmod +x /usr/local/bin/argocd
+kubectl create namespace argocd
+```
+
+```
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
+
+```
+```
+kubectl get pods -n argocd
+```
+
+## Step 5: Publicly accessible ArgoCD-Server
+
+By default, Argocd-server is not publicly accessible, but we can achieve external accessibility by utilizing a load balancer. While alternative methods like port forwarding can also provide access, this blog will focus on using a load balancer.
+
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+Use the command below to store your DNS name in a variable ARGOCD_SERVER.
+```
+export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`
+```
+
+## Step 6: Login to ArgoCD from CLI
+
+We will address the requirements for accessing a system, which include a username and password. However, it is essential to note that the initial password is automatically generated. By default, the username is set to ‘admin’
+
+Take load balancer DNS from the AWS console or the terminal by running the command “echo $ARGOCD_SERVER” and paste it into the browser.
+
+Store password in variable ‘ARGO_PWD’ by using the below command:
+```
+export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o 
+jsonpath="{.data.password}" | base64 -d`
+
+```
+Now, log into ArgoCD using the below command:
+
 
    You can install ArgoCD on your Kubernetes cluster by following the instructions provided in the [EKS Workshop](https://archive.eksworkshop.com/intermediate/290_argocd/install/) documentation.
 
@@ -854,4 +905,5 @@ To deploy an application with ArgoCD, you can follow these steps, which I'll out
 **Phase 7: Cleanup**
 
 1. **Cleanup AWS EC2 Instances:**
-    - Terminate AWS EC2 instances that are no longer needed.
+    - Terminate AWS EC2 instances that are no longer needed.ll
+    
