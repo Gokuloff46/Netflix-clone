@@ -1,26 +1,19 @@
-<!-- <div align="center">
-  <img src="./public/assets/DevSecOps.png" alt="Logo" width="100%" height="100%">
 
-  <br>
-  <a href="http://netflix-clone-with-tmdb-using-react-mui.vercel.app/">
-    <img src="./public/assets/netflix-logo.png" alt="Logo" width="100" height="32">
-  </a>
-</div>
 
-<br />
+
 
 <div align="center">
   <img src="./public/assets/home-page.png" alt="Logo" width="100%" height="100%">
   <p align="center">Home Page</p>
 </div>
 
-# **Youtube Video for step by step Demonstration!**
+<!-- # **Youtube Video for step by step Demonstration!**
 [![Video Tutorial](https://img.youtube.com/vi/g8X5AoqCJHc/0.jpg)](https://youtu.be/g8X5AoqCJHc)
 
 
 ## Susbcribe:
 [https://www.youtube.com/@cloudchamp?
-](https://www.youtube.com/@cloudchamp?sub_confirmation=1) -->
+](https://www.youtube.com/@cloudchamp?sub_confirmation=1) --> -->
 
 # Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
 
@@ -906,4 +899,65 @@ Now, log into ArgoCD using the below command:
 
 1. **Cleanup AWS EC2 Instances:**
   - Terminate AWS EC2 instances that are no longer needed.
-    
+
+**Output Screen shoots**
+
+
+<div align="center">
+  <img src="./img-src/git-hub.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+
+<br>
+<div align="center">
+  <img src="./img-src/Ec2-instance.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+
+<div align="center">
+  <img src="./img-src/Jenkins.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/Sonarqube.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/AWS_cluster-creation.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/AWS-cluster.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/Grafana.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/K8s-grafana.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/Node-exporter-grafana.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+<div align="center">
+  <img src="./img-src/Agro-cd.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
+
+<div align="center">
+  <img src="./img-src/Netflix-page.png" alt="Logo" width="100%" height="100%">
+  <p align="center">Home Page</p>
+</div>
+<br>
