@@ -905,59 +905,59 @@ Now, log into ArgoCD using the below command:
 
 <div align="center">
   <img src="./img-src/git-hub.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Git-Hub</p> -->
 </div>
 
 <br>
 <div align="center">
   <img src="./img-src/Ec2-instance.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 
 <div align="center">
   <img src="./img-src/Jenkins.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/Sonarqube.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/AWS_cluster-creation.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/AWS-cluster.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/Grafana.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/K8s-grafana.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/Node-exporter-grafana.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 <div align="center">
   <img src="./img-src/Agro-cd.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
 
 <div align="center">
   <img src="./img-src/Netflix-page.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
+  <!-- <p align="center">Home Page</p> -->
 </div>
 <br>
